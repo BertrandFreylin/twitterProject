@@ -1,0 +1,2 @@
+HEROES_LIST = '"Batman" OR "Wolverine" OR "Spiderman" OR "Superman" OR "Captain America" OR "Iron Man" OR "Hulk" OR "Thor" OR "Deadpool" OR "Wonder Woman"'
+HEROES_LIST_FORMATED = ['Batman', 'Wolverine', 'Spiderman', 'Superman', 'Captain America', 'Iron Man', 'Hulk', 'Thor', 'Deadpool', 'Wonder Woman']

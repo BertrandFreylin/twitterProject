@@ -134,5 +134,6 @@ auth.set_access_token('849267006754967552-0Pvp794wmSGCtQI8DWyyDWPNvA2GBIZ', '3Nz
 
 client_mongo = MongoClient('localhost', 27017)
 db_mongo = client_mongo['twitter']
-collection_mongo = db_mongo['tweets']
+collection_mongo_main = db_mongo['tweets']
+collection_mongo_test = db_mongo['tweets_copy']
 api_twitter = tweepy.API(auth)
