@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 import json
-from matcher.constants import HEROES_LIST,HEROES_LIST_FORMATED
+from matcher.constants import HEROES_LIST,HEROES_LIST_FORMATED, COUNTRY_FORMAT
 from twitter.settings import *
 import operator
 
@@ -60,26 +60,40 @@ def get_popular_heroes(request):
             content_type="application/json"
         )
 
-
-def get_good_opinion_heroes():
+@csrf_exempt
+def get_support_heroes(request):
 
     opinions_list = defaultdict(dict)
-
+    opinions_list['comic']['TOTAL'] = 0
+    opinions_list['movie']['TOTAL'] = 0
     for hero in HEROES_LIST_FORMATED:
         for support in ['comic', 'movie']:
             result = collection_mongo_main.find({'$and': [{'text': {'$regex': hero, '$options': 'i'}}, {'text': {'$regex': support, '$options': 'i'}}]}).count()
             opinions_list[support][hero] = result
-    return opinions_list
+            opinions_list[support]['TOTAL'] += result
+    return HttpResponse(
+        json.dumps(opinions_list),
+        content_type="application/json"
+    )
 
 
-def get_countries_heroes():
+@csrf_exempt
+def get_countries_heroes(request):
+    if request.method == "POST":
+        countries_heroes = list(collection_mongo_main.aggregate([{'$group': {'_id': '$user.lang', 'count': {'$sum': 1}}}, {'$sort': {'count': -1}}, {'$limit': 20}]))
+        countries_heroes_list = {}
+        for country in countries_heroes:
+            real_country = COUNTRY_FORMAT[country['_id']]
+            countries_heroes_list[real_country] = country['count']
 
-    countries_heroes = collection_mongo_main.aggregate([{'$group': {'_id': '$user.lang', 'count': {'$sum': 1}}}, {'$sort': {'count': -1}}, {'$limit': 20}])
+        return HttpResponse(
+            json.dumps(countries_heroes_list),
+            content_type="application/json"
+        )
 
-    return list(countries_heroes)
 
-
-def get_fav_heroes_by_country():
+@csrf_exempt
+def get_fav_heroes_by_country(request):
     countries_list = get_countries_heroes()
     countries_heroes = defaultdict(dict)
     for country in countries_list:
@@ -104,3 +118,22 @@ def get_tweet_ratio(request):
             json.dumps(response_data),
             content_type="application/json"
         )
+
+@csrf_exempt
+def get_support_heroes_by_hero(request):
+
+    opinions_list = defaultdict(dict)
+
+    for support in ['comic', 'movie']:
+        for hero in HEROES_LIST_FORMATED:
+            result = collection_mongo_main.find({'$and': [{'text': {'$regex': hero, '$options': 'i'}}, {'text': {'$regex': support, '$options': 'i'}}]}).count()
+            opinions_list[hero][support] = result
+            if 'TOTAL' in opinions_list[hero]:
+                opinions_list[hero]['TOTAL'] += result
+            else:
+                opinions_list[hero]['TOTAL'] = result
+
+    return HttpResponse(
+        json.dumps(opinions_list),
+        content_type="application/json"
+    )
