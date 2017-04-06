@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 import json
-from matcher.constants import HEROES_LIST,HEROES_LIST_FORMATED, COUNTRY_FORMAT
+from matcher.constants import HEROES_LIST,HEROES_LIST_FORMATED, COUNTRY_FORMAT, COUNTRY_FORMAT_NAME
 from twitter.settings import *
 import operator
 
@@ -94,13 +94,17 @@ def get_countries_heroes(request):
 
 @csrf_exempt
 def get_fav_heroes_by_country(request):
-    countries_list = get_countries_heroes()
+    countries_list = get_countries()
     countries_heroes = defaultdict(dict)
     for country in countries_list:
         for hero in HEROES_LIST_FORMATED:
             result = collection_mongo_main.find({'$and': [{'text': {'$regex': hero, '$options': 'i'}},{'user.lang': country['_id']}]}).count()
-            countries_heroes[country['_id']][hero] = result
-    return countries_heroes
+            countries_heroes[COUNTRY_FORMAT_NAME[country['_id']]][hero] = result
+            countries_heroes['HEROES'][hero] = hero
+    return HttpResponse(
+        json.dumps(countries_heroes),
+        content_type="application/json"
+    )
 
 
 @csrf_exempt
@@ -137,3 +141,8 @@ def get_support_heroes_by_hero(request):
         json.dumps(opinions_list),
         content_type="application/json"
     )
+
+
+def get_countries():
+    countries_heroes = collection_mongo_main.aggregate([{'$group': {'_id': '$user.lang', 'count': {'$sum': 1}}}, {'$sort': {'count': -1}}, {'$limit': 20}])
+    return list(countries_heroes)

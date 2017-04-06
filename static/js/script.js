@@ -141,8 +141,7 @@ function mapGlobal() {
         type: "post",
         data: 'get_countries_heroes',
         success: function(json_dict) {
-            console.log(json_dict);
-            var ordered_country = [['Country', 'Popularity']]
+            var ordered_country = [['Pays', 'Popularité']]
             for(var i =0 in json_dict) {
                 ordered_country.push([i, json_dict[i]])
             }
@@ -153,6 +152,44 @@ function mapGlobal() {
             var chart = new google.visualization.GeoChart(document.getElementById('mapchartbycountry'));
 
             chart.draw(data, options);
+        }
+        });
+}
+
+google.charts.load('current', {'packages':['bar']});
+google.charts.setOnLoadCallback(mapHeroesGlobal);
+
+function mapHeroesGlobal() {
+        $.ajax({
+        url: "/get_fav_heroes_by_country/",
+        type: "post",
+        data: 'get_fav_heroes_by_country',
+        success: function(json_dict) {
+            console.log(json_dict);
+            var final_legend = ['Pays'];
+            for(var i =0 in json_dict['HEROES']) {
+                final_legend.push(json_dict['HEROES'][i]);
+            }
+            var final_countries = [final_legend];
+            console.log(final_legend);
+            for(var i =0 in json_dict) {
+                if(i != 'HEROES') {
+                    var temp_heroes = [i];
+                    for(var j =0 in json_dict['HEROES']) {
+                        temp_heroes.push(json_dict[i][j]);
+                    }
+                    final_countries.push(temp_heroes)
+                }
+            }
+            var data = google.visualization.arrayToDataTable(final_countries);
+
+            var view = new google.visualization.DataView(data);
+
+            var chart = new google.visualization.ColumnChart(document.getElementById("mapchartbycountrybyheroes"));
+            var options = {
+                legend: 'none',
+            };
+            chart.draw(view, options);
         }
         });
 }

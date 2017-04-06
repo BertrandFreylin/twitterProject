@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^get_support_heroes/', views.get_support_heroes, name='get_support_heroes'),
     url(r'^get_support_heroes_by_hero/', views.get_support_heroes_by_hero, name='get_support_heroes'),
     url(r'^get_countries_heroes/', views.get_countries_heroes, name='get_countries_heroes'),
+    url(r'^get_fav_heroes_by_country/', views.get_fav_heroes_by_country, name='get_fav_heroes_by_country'),
 ]
