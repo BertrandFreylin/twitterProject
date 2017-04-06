@@ -2,6 +2,7 @@
 from collections import defaultdict
 
 from django.views.generic import TemplateView
+
 from matcher.constants import HEROES_LIST,HEROES_LIST_FORMATED
 from twitter.settings import *
 import operator
@@ -82,9 +83,8 @@ def get_fav_heroes_by_country():
 def get_tweet_ratio():
     total = collection_mongo_main.find().count()
 
+    part = 0
+    for hero in HEROES_LIST_FORMATED:
+        part += collection_mongo_main.find({'text': {'$regex': hero, '$options': 'i'}}).count()
 
-    part = collection_mongo_main.find({'text': {'$regex': '^((?!BATMAN).)*$', '$options' : 'i'}}).count()
-
-    ratio = total/part
-
-    return ratio
+    return total, part
