@@ -1,11 +1,14 @@
 #-*- coding: utf-8 -*-
 from collections import defaultdict
 
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-
+import json
 from matcher.constants import HEROES_LIST,HEROES_LIST_FORMATED
 from twitter.settings import *
 import operator
+
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -14,7 +17,7 @@ class HomeView(TemplateView):
         context = super(HomeView, self).get_context_data(**kwargs)
         #context['result_query'] = get_tweets_from_mongo()
         #save_tweets_to_mongo(HEROES_LIST, collection_mongo_main, 20000)
-        get_tweet_ratio()
+        #get_tweet_ratio()
         return context
 
 
@@ -42,14 +45,20 @@ def save_tweets_to_mongo(query, mongo_collection, count):
     mongo_collection.insert_many([tweet._json for tweet in searched_tweets])
 
 
-def get_popular_heroes():
-    result = {}
-    for hero in HEROES_LIST_FORMATED:
-        result[hero] = collection_mongo_main.find({'text': {'$regex': hero, '$options': 'i'}}).count()
+@csrf_exempt
+def get_popular_heroes(request):
+    if request.method == "POST":
+        result = {}
+        for hero in HEROES_LIST_FORMATED:
+            result[hero] = collection_mongo_main.find({'text': {'$regex': hero, '$options': 'i'}}).count()
 
-    sorted_hero = sorted(result.items(), key=operator.itemgetter(1), reverse=True)
+        sorted_hero = sorted(result.items(), key=operator.itemgetter(1), reverse=True)
+        response_data = dict((x, y) for x, y in sorted_hero)
 
-    return sorted_hero
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
 
 
 def get_good_opinion_heroes():
@@ -80,11 +89,18 @@ def get_fav_heroes_by_country():
     return countries_heroes
 
 
-def get_tweet_ratio():
-    total = collection_mongo_main.find().count()
+@csrf_exempt
+def get_tweet_ratio(request):
+    if request.method == "POST":
+        total = collection_mongo_main.find().count()
 
-    part = 0
-    for hero in HEROES_LIST_FORMATED:
-        part += collection_mongo_main.find({'text': {'$regex': hero, '$options': 'i'}}).count()
+        part = 0
+        for hero in HEROES_LIST_FORMATED:
+            part += collection_mongo_main.find({'text': {'$regex': hero, '$options': 'i'}}).count()
 
-    return total, part
+        response_data = {'name_part': total-part, 'text_part':part}
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
