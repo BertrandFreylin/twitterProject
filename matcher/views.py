@@ -15,6 +15,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
+        get_fav_rt_hero(self.request)
         #context['result_query'] = get_tweets_from_mongo()
         #save_tweets_to_mongo(HEROES_LIST, collection_mongo_main, 20000)
         #get_tweet_ratio()
@@ -99,10 +100,14 @@ def get_fav_heroes_by_country(request):
     for country in countries_list:
         for hero in HEROES_LIST_FORMATED:
             result = collection_mongo_main.find({'$and': [{'text': {'$regex': hero, '$options': 'i'}},{'user.lang': country['_id']}]}).count()
-            countries_heroes[COUNTRY_FORMAT_NAME[country['_id']]][hero] = result
-            countries_heroes['HEROES'][hero] = hero
+            countries_heroes[COUNTRY_FORMAT[country['_id']]][hero] = result
+
+    ordered_data = {}
+    for country, v in countries_heroes.items():
+        ordered_data[country] = {'top_hero': max(v.iteritems(), key=operator.itemgetter(1))[0], 'value': v[max(v.iteritems(), key=operator.itemgetter(1))[0]]}
+
     return HttpResponse(
-        json.dumps(countries_heroes),
+        json.dumps(ordered_data),
         content_type="application/json"
     )
 
@@ -146,3 +151,18 @@ def get_support_heroes_by_hero(request):
 def get_countries():
     countries_heroes = collection_mongo_main.aggregate([{'$group': {'_id': '$user.lang', 'count': {'$sum': 1}}}, {'$sort': {'count': -1}}, {'$limit': 20}])
     return list(countries_heroes)
+
+
+@csrf_exempt
+def get_fav_rt_hero(request):
+    order_data = defaultdict(dict)
+    for hero in HEROES_LIST_FORMATED:
+
+        data = list(collection_mongo_main.aggregate([{'$match': {'text': {'$regex': hero, '$options': 'i'}}}, {'$group': {'_id': hero,'totalfav':{ '$sum': "$favorite_count"}, 'totalrt': {'$sum': "$retweet_count"}}}]))
+        order_data[hero]['totalrt'] = data[0]['totalrt']
+        order_data[hero]['totalfav'] = data[0]['totalfav']
+
+    return HttpResponse(
+        json.dumps(order_data),
+        content_type="application/json"
+    )

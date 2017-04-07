@@ -147,7 +147,9 @@ function mapGlobal() {
             }
             var data = google.visualization.arrayToDataTable(ordered_country);
 
-            var options = {};
+            var options = {
+                height: 500,
+            };
 
             var chart = new google.visualization.GeoChart(document.getElementById('mapchartbycountry'));
 
@@ -156,7 +158,7 @@ function mapGlobal() {
         });
 }
 
-google.charts.load('current', {'packages':['bar']});
+google.charts.load('current', {'packages':['geochart']});
 google.charts.setOnLoadCallback(mapHeroesGlobal);
 
 function mapHeroesGlobal() {
@@ -165,31 +167,63 @@ function mapHeroesGlobal() {
         type: "post",
         data: 'get_fav_heroes_by_country',
         success: function(json_dict) {
+            var ordered_country = [['Pays', 'Top Héros', 'Popularité']];
             console.log(json_dict);
-            var final_legend = ['Pays'];
-            for(var i =0 in json_dict['HEROES']) {
-                final_legend.push(json_dict['HEROES'][i]);
+            for(country in json_dict) {
+                ordered_country.push([country, json_dict[country]['top_hero'], json_dict[country]['value']])
             }
-            var final_countries = [final_legend];
-            console.log(final_legend);
-            for(var i =0 in json_dict) {
-                if(i != 'HEROES') {
-                    var temp_heroes = [i];
-                    for(var j =0 in json_dict['HEROES']) {
-                        temp_heroes.push(json_dict[i][j]);
-                    }
-                    final_countries.push(temp_heroes)
-                }
-            }
-            var data = google.visualization.arrayToDataTable(final_countries);
+            var data = google.visualization.arrayToDataTable(ordered_country);
 
-            var view = new google.visualization.DataView(data);
-
-            var chart = new google.visualization.ColumnChart(document.getElementById("mapchartbycountrybyheroes"));
             var options = {
-                legend: 'none',
+                height: 500,
             };
-            chart.draw(view, options);
+
+            var chart = new google.visualization.GeoChart(document.getElementById('mapchartbycountrybyheroes'));
+
+            chart.draw(data, options);
         }
         });
+}
+
+google.charts.load('current', {packages: ['bar']});
+google.charts.setOnLoadCallback(bartoto);
+
+function bartoto() {
+
+    $.ajax({
+        url: "/get_fav_rt_hero/",
+        type: "post",
+        data: 'get_fav_rt_hero',
+        success: function(json_dict) {
+            var render = [['Héros', 'Favoris', 'Retweet']];
+
+            for (hero in json_dict){
+                render.push([hero, json_dict[hero]['totalfav'], json_dict[hero]['totalrt']])
+            }
+            var data = new google.visualization.arrayToDataTable(render);
+
+            var options = {
+              height: 500,
+              chart: {
+                title: 'Nearby galaxies',
+                subtitle: 'distance on the left, brightness on the right'
+              },
+              bars: 'horizontal', // Required for Material Bar Charts.
+              series: {
+                0: { axis: 'distance' }, // Bind series 0 to an axis named 'distance'.
+                1: { axis: 'brightness' } // Bind series 1 to an axis named 'brightness'.
+              },
+              axes: {
+                x: {
+                  distance: {label: 'Favoris'}, // Bottom x-axis.
+                  brightness: {side: 'top', label: 'Retweet'} // Top x-axis.
+                }
+              }
+            };
+
+          var chart = new google.charts.Bar(document.getElementById('barchartfavrt'));
+          chart.draw(data, options);
+        }
+    });
+
 }

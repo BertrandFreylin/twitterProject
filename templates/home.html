@@ -4,14 +4,85 @@
 <div id="loading">
 </div>
 <div class="container-fluid panel panel-success">
-    <div class="panel-heading"><span>Analyse</span></div>
-    <div class="row panel-body" style="margin:0">
-        <div class="col-xs-12 col-md-6 col-lg-6"><div id="partchart"></div></div>
-        <div class="col-xs-12 col-md-6 col-lg-6"><div id="popchart"></div></div>
-        <div class="col-xs-12 col-md-6 col-lg-6"><div id="supportchart"></div></div>
-        <div class="col-xs-12 col-md-6 col-lg-6"><div id="supportdetailchart"></div></div>
-        <div class="col-xs-12 col-md-12 col-lg-12"><div id="mapchartbycountry"></div></div>
-        <div class="col-xs-12 col-md-12 col-lg-12"><div id="mapchartbycountrybyheroes"></div></div>
+<div class="panel-heading"><span>Analyse</span></div>
+
+<div class="row panel-body" style="margin:0">
+    <div class="col-xs-12 col-md-6 col-lg-6">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tweets & Nom/Description</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="partchart"></div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="col-xs-12 col-md-6 col-lg-6">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tweets par Héros</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="popchart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6 col-lg-6">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Percentage by support</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="supportchart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6 col-lg-6">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bar par support</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="supportdetailchart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-12 col-lg-12">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Map by country</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="mapchartbycountry"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-12 col-lg-12">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bar by heroes</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="mapchartbycountrybyheroes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-12 col-lg-12">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bar by Fav/RT</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="barchartfavrt"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 {% endblock %}
