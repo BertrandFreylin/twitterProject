@@ -9,7 +9,7 @@
 <div class="row panel-body" style="margin:0">
     <div class="col-xs-12 col-md-6 col-lg-6">
         <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
-            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tweets & Nom/Description</div>
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Répartition des Supers Héros entre les tweets et les descriptions</div>
             <div class="panel-body">
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div id="partchart"></div>
@@ -20,7 +20,7 @@
 
     <div class="col-xs-12 col-md-6 col-lg-6">
         <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
-            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tweets par Héros</div>
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Héros les plus cités dans les tweets</div>
             <div class="panel-body">
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div id="popchart"></div>
@@ -28,10 +28,19 @@
             </div>
         </div>
     </div>
-
-    <div class="col-xs-12 col-md-6 col-lg-6">
+    <div class="col-xs-12 col-md-12 col-lg-12">
         <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
-            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Percentage by support</div>
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Pays tweetant le plus à propos des supers héros</div>
+            <div class="panel-body">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div id="mapchartbycountry"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-4 col-lg-4">
+        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Répartition des tweets par support</div>
             <div class="panel-body">
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div id="supportchart"></div>
@@ -40,9 +49,9 @@
         </div>
     </div>
 
-    <div class="col-xs-12 col-md-6 col-lg-6">
+    <div class="col-xs-12 col-md-8 col-lg-8">
         <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
-            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bar par support</div>
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Répartition des supports par héros</div>
             <div class="panel-body">
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div id="supportdetailchart"></div>
@@ -51,20 +60,10 @@
         </div>
     </div>
 
-    <div class="col-xs-12 col-md-12 col-lg-12">
-        <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
-            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Map by country</div>
-            <div class="panel-body">
-                <div class="col-xs-12 col-md-12 col-lg-12">
-                    <div id="mapchartbycountry"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="col-xs-12 col-md-12 col-lg-12">
         <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
-            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bar by heroes</div>
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Popularité des héros les plus tweetés par pays</div>
             <div class="panel-body">
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div id="mapchartbycountrybyheroes"></div>
@@ -75,7 +74,7 @@
 
     <div class="col-xs-12 col-md-12 col-lg-12">
         <div class="col-xs-12 col-md-12 col-lg-12 panel panel-primary">
-            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Bar by Fav/RT</div>
+            <div class="panel-heading" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Répartition des tweets favoris et retweetés par héros</div>
             <div class="panel-body">
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div id="barchartfavrt"></div>

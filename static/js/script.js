@@ -17,9 +17,8 @@ function tweetRatio() {
             ]);
             var chart = new google.visualization.PieChart(document.getElementById('partchart'));
             var options = {
-                legend: 'none',
-                'width':400,
-                 'height':300
+                'width':600,
+                'height':300
             };
             chart.draw(data, options);
         }
@@ -58,7 +57,7 @@ function popHeroes() {
             var chart = new google.visualization.ColumnChart(document.getElementById("popchart"));
             var options = {
                 legend: 'none',
-                'width':650,
+                'width':600,
                 'height':300
             };
             chart.draw(view, options);
@@ -89,8 +88,9 @@ function commovRatio() {
             greenFrom: 50, greenTo: 100,
             yellowFrom:30, yellowTo: 50,
             redFrom:0, redTo: 30,
-            minorTicks: 5,
+            minorTicks: 5
             };
+
 
             var chart = new google.visualization.Gauge(document.getElementById('supportchart'));
 
@@ -108,10 +108,14 @@ function commovDetailRatio() {
         type: "post",
         data: 'get_support_heroes_by_hero',
         success: function(json_dict) {
-            var result_array = [['Héros', 'Films', 'Comics', 'Total']];
 
-            for(var i =0 in json_dict) {
-                result_array.push([i, json_dict[i]['movie'], json_dict[i]['comic'], json_dict[i]['TOTAL']])
+            var keys = Object.keys(json_dict);
+            keys.sort();
+            var result_array = [['Héros', 'Films', 'Comics', 'Total']];
+            for (var i=0; i<keys.length; i++) {
+                var key = keys[i];
+                var value = json_dict[key];
+                result_array.push([key, value['movie'], value['comic'], value['TOTAL']]);
             }
 
             var data = google.visualization.arrayToDataTable(result_array);
@@ -168,7 +172,6 @@ function mapHeroesGlobal() {
         data: 'get_fav_heroes_by_country',
         success: function(json_dict) {
             var ordered_country = [['Pays', 'Top Héros', 'Popularité']];
-            console.log(json_dict);
             for(country in json_dict) {
                 ordered_country.push([country, json_dict[country]['top_hero'], json_dict[country]['value']])
             }
@@ -204,10 +207,6 @@ function bartoto() {
 
             var options = {
               height: 500,
-              chart: {
-                title: 'Nearby galaxies',
-                subtitle: 'distance on the left, brightness on the right'
-              },
               bars: 'horizontal', // Required for Material Bar Charts.
               series: {
                 0: { axis: 'distance' }, // Bind series 0 to an axis named 'distance'.
